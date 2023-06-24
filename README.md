@@ -1,6 +1,6 @@
-# Side Mission Firmware
+# Ukaton Mission Firmware
 
-How to load to your Side Mission motion module:
+How to load to your Ukaton Mission motion module:
 0. Remove the battery from the motion module and plug in via USB
 1. Open VSCode
 2. Install PlatformIO on VSCode
