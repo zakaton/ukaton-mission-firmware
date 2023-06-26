@@ -102,6 +102,16 @@ namespace sensorData
     }
     void setConfigurations(const uint8_t *newConfigurations, uint8_t size, Configurations &_configurations)
     {
+#if DEBUG
+        Serial.print("[sensorData] message: ");
+        for (uint8_t index = 0; index < size; index++)
+        {
+            Serial.print(newConfigurations[index]);
+            Serial.print(',');
+        }
+        Serial.println();
+#endif
+
         uint8_t offset = 0;
         while (offset < size)
         {
