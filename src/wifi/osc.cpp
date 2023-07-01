@@ -4,6 +4,7 @@
 #include "osc.h"
 #include "information/type.h"
 #include "information/name.h"
+#include "haptics.h"
 
 #include "sensor/motionSensor.h"
 #include "sensor/pressureSensor.h"
@@ -88,6 +89,10 @@ namespace osc
         "raw",
         "centerOfMass",
         "sum"};
+
+    std::map<std::string, haptics::VibrationType> stringToVibrationType{
+        {"waveform", haptics::VibrationType::WAVEFORM},
+        {"sequence", haptics::VibrationType::SEQUENCE}};
 
     const uint16_t min_delay_ms = 20;
     uint16_t motionDataRates[(uint8_t)MotionSensorDataType::COUNT]{0};
@@ -314,6 +319,28 @@ namespace osc
         }
     }
 
+    void routeVibration(OSCMessage &message, int addressOffset)
+    {
+        if (message.isString(0))
+        {
+            char vibrationTypeString[10];
+            auto vibrationTypeStringLength = message.getString(0, vibrationTypeString, sizeof(vibrationTypeString));
+            if (vibrationTypeStringLength > 0 && stringToVibrationType.count(vibrationTypeString))
+            {
+                auto vibrationType = stringToVibrationType[vibrationTypeString];
+                auto messageSize = message.size();
+                uint8_t vibration[messageSize]{0};
+                vibration[0] = (uint8_t)vibrationType;
+                for (uint8_t messageIndex = 1; messageIndex < messageSize; messageIndex++)
+                {
+                    auto value = message.getInt(messageIndex);
+                    vibration[messageIndex] = value;
+                }
+                haptics::vibrate(vibration, messageSize);
+            }
+        }
+    }
+
     bool _isParsingPacket = false;
     void onUDPPacket(AsyncUDPPacket packet)
     {
@@ -366,6 +393,7 @@ namespace osc
             bundle.route("/type", routeType);
             bundle.route("/name", routeName);
             bundle.route("/rate", routeSensorRate);
+            bundle.route("/vibrate", routeVibration);
             shouldSendToListener = shouldSendToListener || (_listenerMessageFlags.size() > 0);
         }
 

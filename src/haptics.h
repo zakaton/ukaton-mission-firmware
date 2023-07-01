@@ -7,6 +7,13 @@
 
 namespace haptics
 {
+    enum class VibrationType : uint8_t
+    {
+        WAVEFORM = 0,
+        SEQUENCE,
+        COUNT
+    };
+
     void vibrate(uint8_t *data, size_t length);
 
     void begin();

@@ -6,6 +6,7 @@
 #include "information/name.h"
 #include "sensor/sensorData.h"
 #include "battery.h"
+#include "haptics.h"
 
 namespace udp
 {
@@ -26,7 +27,9 @@ namespace udp
         GET_SENSOR_DATA_CONFIGURATIONS,
         SET_SENSOR_DATA_CONFIGURATIONS,
 
-        SENSOR_DATA
+        SENSOR_DATA,
+
+        VIBRATION
     };
 
     unsigned long lastUpdateBatteryLevelTime = 0;
@@ -128,6 +131,16 @@ namespace udp
         _listenerMessageFlags[MessageType::SET_SENSOR_DATA_CONFIGURATIONS] = true;
         return dataOffset;
     }
+    uint8_t onListenerRequestVibration(uint8_t *data, uint8_t dataOffset)
+    {
+        auto vibrationLength = data[dataOffset++];
+        auto vibration = (uint8_t *)&data[dataOffset];
+        dataOffset += vibrationLength;
+        haptics::vibrate(vibration, vibrationLength);
+
+        //_listenerMessageFlags[MessageType::VIBRATION] = true;
+        return dataOffset;
+    }
 
     bool _isParsingPacket = false;
     void onUDPPacket(AsyncUDPPacket packet)
@@ -214,6 +227,9 @@ namespace udp
                 break;
             case MessageType::SET_SENSOR_DATA_CONFIGURATIONS:
                 dataOffset = onListenerRequestSetSensorDataConfigurations(data, dataOffset);
+                break;
+            case MessageType::VIBRATION:
+                dataOffset = onListenerRequestVibration(data, dataOffset);
                 break;
             default:
                 Serial.print("uncaught udp message type: ");
@@ -336,6 +352,8 @@ namespace udp
                     _listenerMessageDataSize += sensorData::pressureDataSize;
                 }
                 break;
+                case MessageType::VIBRATION:
+                    break;
                 default:
                     Serial.print("uncaught listener message type: ");
                     Serial.println((uint8_t)messageType);

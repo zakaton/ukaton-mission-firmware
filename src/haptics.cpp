@@ -3,13 +3,6 @@
 
 namespace haptics
 {
-    enum class VibrationType : uint8_t
-    {
-        WAVEFORM = 0,
-        SEQUENCE,
-        COUNT
-    };
-
     constexpr uint8_t max_waveform_length = 8;
     constexpr uint8_t max_sequence_length = 20;
 

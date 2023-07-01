@@ -12,6 +12,7 @@
 #include "weight/weightDetection.h"
 #include "battery.h"
 #include "ble/BLEGenericPeer.h"
+#include "haptics.h"
 
 #include "FS.h"
 #include <LittleFS.h>
@@ -59,7 +60,9 @@ namespace webSocket
         GET_FIRMWARE_VERSION,
         FIRMWARE_UPDATE,
 
-        BLE_GENERIC_PEER
+        BLE_GENERIC_PEER,
+
+        VIBRATION
     };
 
     AsyncWebSocket server("/ws");
@@ -335,6 +338,16 @@ namespace webSocket
 
         return dataOffset;
     }
+    uint8_t onClientRequestVibration(uint8_t *data, uint8_t dataOffset)
+    {
+        auto vibrationLength = data[dataOffset++];
+        auto vibration = (uint8_t *)&data[dataOffset];
+        dataOffset += vibrationLength;
+        haptics::vibrate(vibration, vibrationLength);
+
+        //_clientMessageFlags[MessageType::VIBRATION] = true;
+        return dataOffset;
+    }
     void _onWebSocketMessage(AsyncWebSocketClient *_client, void *arg, uint8_t *data, size_t len)
     {
         if (client == _client)
@@ -411,6 +424,9 @@ namespace webSocket
                         break;
                     case MessageType::BLE_GENERIC_PEER:
                         dataOffset = BLEGenericPeer::onClientMessage(data, dataOffset);
+                        break;
+                    case MessageType::VIBRATION:
+                        dataOffset = onClientRequestVibration(data, dataOffset);
                         break;
                     default:
                         Serial.print("uncaught websocket message type: ");
@@ -742,6 +758,8 @@ namespace webSocket
                     _clientMessageData[_clientMessageDataSize++] = BLEGenericPeer::clientMessageDataSize;
                     memcpy(&_clientMessageData[_clientMessageDataSize], BLEGenericPeer::clientMessageData, BLEGenericPeer::clientMessageDataSize);
                     _clientMessageDataSize += BLEGenericPeer::clientMessageDataSize;
+                    break;
+                case MessageType::VIBRATION:
                     break;
                 default:
                     Serial.print("uncaught client message type: ");
