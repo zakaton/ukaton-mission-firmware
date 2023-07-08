@@ -276,6 +276,7 @@ namespace pressureSensor
                     centerOfMass[0] += ((float)sensorPositions[index][0] * (float)pressureDataDoubleByte[index]) / (float)mass;
                     centerOfMass[1] += ((float)sensorPositions[index][1] * (float)pressureDataDoubleByte[index]) / (float)mass;
                 }
+                centerOfMass[1] = 1 - centerOfMass[1];
             }
 
             didUpdate[DataType::CENTER_OF_MASS] = true;
@@ -310,6 +311,7 @@ namespace pressureSensor
                 {
                     heelToToe += (sensorPositions[index][1] * (double)pressureDataDoubleByte[index]) / (double)mass;
                 }
+                heelToToe = 1 - heelToToe;
             }
 
             didUpdate[DataType::HEEL_TO_TOE] = true;
