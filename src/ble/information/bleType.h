@@ -10,6 +10,7 @@ namespace bleType
     class CharacteristicCallbacks;
 
     void setup();
+    void updateCharacteristicValue();
 } // namespace bleType
 
 #endif // _BLE_TYPE_

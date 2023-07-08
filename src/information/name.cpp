@@ -4,6 +4,7 @@
 #include "nimble/nimble/host/services/gap/include/services/gap/ble_svc_gap.h"
 #include <WiFi.h>
 #include "ble/ble.h"
+#include "ble/information/bleName.h"
 
 namespace name
 {
@@ -62,6 +63,7 @@ namespace name
             Serial.println(name.c_str());
 
             onNameUpdate();
+            bleName::updateCharacteristic();
         }
         else
         {

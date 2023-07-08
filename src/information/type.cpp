@@ -5,6 +5,7 @@
 #include "sensor/pressureSensor.h"
 #include "weight/weightData.h"
 #include "weight/weightDetection.h"
+#include "ble/information/bleType.h"
 
 namespace type
 {
@@ -67,6 +68,7 @@ namespace type
             Serial.print("changed device type to: ");
             Serial.println((uint8_t)type);
             onTypeUpdate();
+            bleType::updateCharacteristicValue();
         }
         else
         {

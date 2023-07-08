@@ -12,6 +12,7 @@ namespace bleName
     const std::string *getName();
 
     void setup();
+    void updateCharacteristic();
 } // namespace bleName
 
 #endif // _BLE_NAME_

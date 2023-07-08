@@ -180,7 +180,7 @@ namespace udp
         {
             if (packet.remoteIP() != remoteIP || packet.remotePort() != remotePort)
             {
-                Serial.println("not the same IP!");
+                Serial.println("[UDP] not the same IP!");
                 _isParsingPacket = false;
                 return;
             }
@@ -232,7 +232,7 @@ namespace udp
                 dataOffset = onListenerRequestVibration(data, dataOffset);
                 break;
             default:
-                Serial.print("uncaught udp message type: ");
+                Serial.print("[UDP] uncaught udp message type: ");
                 Serial.println((uint8_t)messageType);
                 dataOffset = length;
                 break;
@@ -355,14 +355,14 @@ namespace udp
                 case MessageType::VIBRATION:
                     break;
                 default:
-                    Serial.print("uncaught listener message type: ");
+                    Serial.print("[UDP] uncaught listener message type: ");
                     Serial.println((uint8_t)messageType);
                     break;
                 }
             }
 
 #if DEBUG
-            Serial.print("Sending to listener message of size ");
+            Serial.print("[UDP] Sending to listener message of size ");
             Serial.print(_listenerMessageDataSize);
             Serial.print(": ");
             for (uint8_t index = 0; index < _listenerMessageDataSize; index++)

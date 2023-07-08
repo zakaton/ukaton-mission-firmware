@@ -69,7 +69,7 @@ namespace haptics
             uint8_t waveformValue = waveform[waveformSlotIndex];
             drv.setWaveform(waveformSlotIndex, waveformValue);
 #if DEBUG
-            Serial.printf("%u: %u\n", waveformSlotIndex, waveformValue);
+            Serial.printf("waveform slot index: %u, value: %u\n", waveformSlotIndex, waveformValue);
 #endif
         }
         drv.go();
@@ -154,7 +154,7 @@ namespace haptics
                 uint8_t waveformValue = (waveformSlotIndex < (length - 1)) ? data[waveformSlotIndex + 1] : 0;
                 waveform[waveformSlotIndex] = waveformValue;
 #if DEBUG
-                Serial.printf("%u: %u\n", waveformSlotIndex, waveformValue);
+                Serial.printf("waveform slot index: %u, value: %u\n", waveformSlotIndex, waveformValue);
 #endif
             }
             shouldTriggerWaveform = true;
@@ -166,7 +166,7 @@ namespace haptics
                 uint8_t sequenceValue = (sequenceIndex < (length - 1)) ? data[sequenceIndex + 1] : 0;
                 sequence[sequenceIndex] = sequenceValue;
 #if DEBUG
-                Serial.printf("%u: %u\n", sequenceIndex, sequenceValue);
+                Serial.printf("sequence index: %u, value: %u\n", sequenceIndex, sequenceValue);
 #endif
             }
             if (sequenceLength > 0)

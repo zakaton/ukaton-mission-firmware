@@ -1,21 +1,23 @@
 #include "bleName.h"
 #include "information/name.h"
 
-namespace bleName {
+namespace bleName
+{
     BLECharacteristic *pCharacteristic;
     class CharacteristicCallbacks : public BLECharacteristicCallbacks
     {
         void onWrite(BLECharacteristic *pCharacteristic)
         {
             auto newName = pCharacteristic->getValue();
-            name::setName((char *) newName.c_str());
-            
+            name::setName((char *)newName.c_str());
+
             auto updatedName = *name::getName();
             pCharacteristic->setValue(updatedName);
         }
     };
 
-    const std::string *getName() {
+    const std::string *getName()
+    {
         return name::getName();
     }
 
@@ -23,6 +25,11 @@ namespace bleName {
     {
         pCharacteristic = ble::createCharacteristic(GENERATE_UUID("4001"), NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE, "name");
         pCharacteristic->setCallbacks(new CharacteristicCallbacks());
+        updateCharacteristic();
+    }
+
+    void updateCharacteristic()
+    {
         pCharacteristic->setValue(*name::getName());
     }
 } // namespace bleName
