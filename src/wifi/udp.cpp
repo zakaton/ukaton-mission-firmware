@@ -29,7 +29,9 @@ namespace udp
 
         SENSOR_DATA,
 
-        VIBRATION
+        VIBRATION,
+
+        SET_REMOTE_RECEIVE_PORT
     };
 
     unsigned long lastUpdateBatteryLevelTime = 0;
@@ -52,7 +54,8 @@ namespace udp
     bool shouldSendToListener = false;
 
     IPAddress remoteIP;
-    uint16_t remotePort;
+    uint16_t remoteSendPort;
+    uint16_t remoteReceivePort;
     unsigned long lastTimePacketWasReceivedByListener;
 
     void _onListenerConnection()
@@ -141,6 +144,16 @@ namespace udp
         //_listenerMessageFlags[MessageType::VIBRATION] = true;
         return dataOffset;
     }
+    uint8_t onListenerRequestSetRemoteReceivePort(uint8_t *data, uint8_t dataOffset)
+    {
+        remoteReceivePort = (((uint16_t)data[dataOffset + 1]) << 8) | ((uint16_t)data[dataOffset]);
+        dataOffset += 2;
+
+        Serial.printf("[UDP] updated remote receive port: %u\n", remoteReceivePort);
+
+        //_listenerMessageFlags[MessageType::SET_REMOTE_RECEIVE_PORT] = true;
+        return dataOffset;
+    }
 
     bool _isParsingPacket = false;
     void onUDPPacket(AsyncUDPPacket packet)
@@ -173,12 +186,13 @@ namespace udp
         {
             _hasListener = true;
             remoteIP = packet.remoteIP();
-            remotePort = packet.remotePort();
+            remoteSendPort = packet.remotePort();
+            remoteReceivePort = packet.remotePort();
             _onListenerConnection();
         }
         else
         {
-            if (packet.remoteIP() != remoteIP || packet.remotePort() != remotePort)
+            if (packet.remoteIP() != remoteIP || packet.remotePort() != remoteSendPort)
             {
                 Serial.println("[UDP] not the same IP!");
                 _isParsingPacket = false;
@@ -230,6 +244,9 @@ namespace udp
                 break;
             case MessageType::VIBRATION:
                 dataOffset = onListenerRequestVibration(data, dataOffset);
+                break;
+            case MessageType::SET_REMOTE_RECEIVE_PORT:
+                dataOffset = onListenerRequestSetRemoteReceivePort(data, dataOffset);
                 break;
             default:
                 Serial.print("[UDP] uncaught udp message type: ");
@@ -354,6 +371,8 @@ namespace udp
                 break;
                 case MessageType::VIBRATION:
                     break;
+                case MessageType::SET_REMOTE_RECEIVE_PORT:
+                    break;
                 default:
                     Serial.print("[UDP] uncaught listener message type: ");
                     Serial.println((uint8_t)messageType);
@@ -373,7 +392,7 @@ namespace udp
             Serial.println();
 #endif
 
-            udp.writeTo(_listenerMessageData, _listenerMessageDataSize, remoteIP, remotePort);
+            udp.writeTo(_listenerMessageData, _listenerMessageDataSize, remoteIP, remoteReceivePort);
 
             shouldSendToListener = false;
             _listenerMessageFlags.clear();
