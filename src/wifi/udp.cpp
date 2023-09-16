@@ -151,7 +151,7 @@ namespace udp
 
         Serial.printf("[UDP] updated remote receive port: %u\n", remoteReceivePort);
 
-        //_listenerMessageFlags[MessageType::SET_REMOTE_RECEIVE_PORT] = true;
+        _listenerMessageFlags[MessageType::SET_REMOTE_RECEIVE_PORT] = true;
         return dataOffset;
     }
 
@@ -372,6 +372,8 @@ namespace udp
                 case MessageType::VIBRATION:
                     break;
                 case MessageType::SET_REMOTE_RECEIVE_PORT:
+                    memcpy(&_listenerMessageData[_listenerMessageDataSize], (uint8_t *)remoteReceivePort, sizeof(remoteReceivePort));
+                    _listenerMessageDataSize += sizeof(remoteReceivePort);
                     break;
                 default:
                     Serial.print("[UDP] uncaught listener message type: ");
