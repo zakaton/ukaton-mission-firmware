@@ -372,7 +372,7 @@ namespace udp
                 case MessageType::VIBRATION:
                     break;
                 case MessageType::SET_REMOTE_RECEIVE_PORT:
-                    memcpy(&_listenerMessageData[_listenerMessageDataSize], (uint8_t *)remoteReceivePort, sizeof(remoteReceivePort));
+                    memcpy(&_listenerMessageData[_listenerMessageDataSize], (uint8_t *)&remoteReceivePort, sizeof(remoteReceivePort));
                     _listenerMessageDataSize += sizeof(remoteReceivePort);
                     break;
                 default:
