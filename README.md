@@ -5,8 +5,7 @@ How to load to your Ukaton Mission motion module:
 1. Open VSCode
 2. Install PlatformIO on VSCode
 3. Open this workspace
-5. [Change the name of your device in definitions.h](https://github.com/zakaton/ukaton-mission-firmware/blob/main/src/definitions.h#L15)
-6. Click the upload button on the bottom (looks like "->")
-7. After uploading, unplug the USB and plug it back in
-8. Test [here](https://ukaton-side-mission.glitch.me/visualization) to see if it works
-9. If it works, add the battery
+4. Click the upload button on the bottom (looks like "->")
+5. After uploading, unplug the USB and plug it back in
+6. Test [here](https://ukaton-side-mission-dev.glitch.me/visualization) to see if it works
+7. If it works, add the battery
