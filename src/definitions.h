@@ -2,7 +2,7 @@
 #ifndef _DEFINITIONS_
 #define _DEFINITIONS_
 
-#define DEBUG false
+#define DEBUG true
 
 #if IS_ESP32_S3
 #define PIN_IMU_SDA 40

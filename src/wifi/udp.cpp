@@ -312,7 +312,7 @@ namespace udp
         }
     }
 
-    uint8_t _listenerMessageData[1 + sizeof(type::Type) + 1 + (sizeof(uint16_t) * sensorData::configurations.flattened.max_size()) + 1 + 1 + sizeof(uint16_t) + 2 + sizeof(sensorData::motionData) + 2 + sizeof(sensorData::pressureData)];
+    uint8_t _listenerMessageData[1 + sizeof(type::Type) + 1 + (sizeof(uint16_t) * sensorData::configurations.flattened.max_size()) + 1 + 1 + 1 + sizeof(uint16_t) + 2 + sizeof(sensorData::motionData) + 2 + sizeof(sensorData::pressureData)];
     uint8_t _listenerMessageDataSize = 0;
     void messageLoop()
     {
@@ -354,6 +354,9 @@ namespace udp
                     break;
                 case MessageType::SENSOR_DATA:
                 {
+                    uint8_t sensorDataSize = 0;
+                    uint8_t sensorDataSizeIndex = _listenerMessageDataSize++;
+
                     uint16_t timestamp = (uint16_t)lastSensorDataUpdateTime;
                     MEMCPY(&_listenerMessageData[_listenerMessageDataSize], &timestamp, sizeof(timestamp));
                     _listenerMessageDataSize += sizeof(timestamp);
@@ -367,6 +370,9 @@ namespace udp
                     _listenerMessageData[_listenerMessageDataSize++] = sensorData::pressureDataSize;
                     memcpy(&_listenerMessageData[_listenerMessageDataSize], sensorData::pressureData, sensorData::pressureDataSize);
                     _listenerMessageDataSize += sensorData::pressureDataSize;
+
+                    sensorDataSize = _listenerMessageDataSize - sensorDataSizeIndex - 1;
+                    _listenerMessageData[sensorDataSizeIndex] = sensorDataSize;
                 }
                 break;
                 case MessageType::VIBRATION:
