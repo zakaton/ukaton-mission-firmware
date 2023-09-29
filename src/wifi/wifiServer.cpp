@@ -50,8 +50,9 @@ namespace wifiServer
             latestConnectionCheckTimestamp = currentTime - (currentTime % check_connection_delay_ms);
             _checkConnectionLoop();
         }
-        
-        if (_isConnected) {
+
+        if (_isConnected)
+        {
             webSocket::loop();
             udp::loop();
             osc::loop();
