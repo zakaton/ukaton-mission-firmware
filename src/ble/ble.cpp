@@ -57,11 +57,6 @@ namespace ble
         pServer->setCallbacks(new ServerCallbacks());
         pService = pServer->createService(BLEUUID(GENERATE_UUID("0000")));
 
-        pAdvertising = pServer->getAdvertising();
-        pAdvertising->addServiceUUID(pService->getUUID());
-        pAdvertising->setScanResponse(true);
-        pAdvertising->setAppearance(0x0541); // https://specificationrefs.bluetooth.com/assigned-values/Appearance%20Values.pdf
-
         bleType::setup();
         bleName::setup();
         bleMotionCalibration::setup();
@@ -75,6 +70,11 @@ namespace ble
         bleFirmwareUpdate::setup();
         bleSteps::setup();
         bleHaptics::setup();
+
+        pAdvertising = pServer->getAdvertising();
+        pAdvertising->addServiceUUID(pService->getUUID());
+        pAdvertising->setScanResponse(true);
+        pAdvertising->setAppearance(0x0541); // https://specificationrefs.bluetooth.com/assigned-values/Appearance%20Values.pdf
 
         start();
     }
