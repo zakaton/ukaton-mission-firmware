@@ -69,7 +69,7 @@ namespace haptics
             uint8_t waveformValue = waveform[waveformSlotIndex];
             drv.setWaveform(waveformSlotIndex, waveformValue);
 #if DEBUG
-            Serial.printf("waveform slot index: %u, value: %u\n", waveformSlotIndex, waveformValue);
+            // Serial.printf("waveform slot index: %u, value: %u\n", waveformSlotIndex, waveformValue);
 #endif
         }
         drv.go();
