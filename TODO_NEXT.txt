@@ -1,0 +1,10 @@
+better namespace names (not just name:: or type::)
+refactor name and sensorData stuff for BLEPEer
+run all ble subNamespaces (ble::sensorData) and stuff
+    use the onSubscribe and manually check ble::isServerConnected and use flags
+rewrite namespaces like name to _name_ or something...
+"calibrate" message to set the relative orientation of the quaternion
+orient quaternion based on device type
+ble prefixes in namespace setups, e.g. bleName::setup(3) => "300x"
+mdns for easier IP discovery
+advertise IP address over BLE

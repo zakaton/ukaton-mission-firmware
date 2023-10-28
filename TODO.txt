@@ -1,0 +1,2 @@
+byteSize in front of each message type for UDP/WebSocket (conflict with BLE)
+chunking notifications into 20-byte packets for crappy androids
