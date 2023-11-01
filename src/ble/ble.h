@@ -28,7 +28,6 @@ namespace ble
     class ServerCallbacks;
 
     extern BLEAdvertising *pAdvertising;
-    extern BLEAdvertisementData *pAdvertisementData;
 
     void setup();
 
@@ -38,6 +37,8 @@ namespace ble
     void start();
     void stop();
     void loop();
+
+    void updateAdvertisementData();
 } // namespace ble
 
 #endif // _BLE_

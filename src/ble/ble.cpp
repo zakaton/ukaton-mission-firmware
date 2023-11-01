@@ -24,7 +24,6 @@ namespace ble
     BLEService *pService;
 
     BLEAdvertising *pAdvertising;
-    BLEAdvertisementData *pAdvertisementData;
 
     bool isServerConnected = false;
     bool shouldUpdateSensorData = false;
@@ -48,6 +47,19 @@ namespace ble
         }
     };
 
+    constexpr uint16_t check_wifi_connection_delay_ms = 1000;
+    unsigned long latestWifiConnectionCheckTimestamp = 0;
+    bool isWifiConnected = false;
+    void _checkWifiConnectionLoop()
+    {
+        auto _isWifiConnected = WiFi.isConnected();
+        if (_isWifiConnected != isWifiConnected)
+        {
+            isWifiConnected = _isWifiConnected;
+            updateAdvertisementData();
+        }
+    }
+
     void setup()
     {
         BLEDevice::init(bleName::getName()->c_str());
@@ -55,7 +67,7 @@ namespace ble
         BLEDevice::setPower(ESP_PWR_LVL_P9);
         pServer = BLEDevice::createServer();
         pServer->setCallbacks(new ServerCallbacks());
-        pService = pServer->createService(BLEUUID(GENERATE_UUID("0000")));
+        pService = pServer->createService("0000");
 
         bleType::setup();
         bleName::setup();
@@ -73,8 +85,9 @@ namespace ble
 
         pAdvertising = pServer->getAdvertising();
         pAdvertising->addServiceUUID(pService->getUUID());
-        pAdvertising->setScanResponse(true);
-        pAdvertising->setAppearance(0x0541); // https://specificationrefs.bluetooth.com/assigned-values/Appearance%20Values.pdf
+        // pAdvertising->setAppearance(0x0541); // https://specificationrefs.bluetooth.com/assigned-values/Appearance%20Values.pdf
+        updateAdvertisementData();
+        pAdvertising->setScanResponse(false);
 
         start();
     }
@@ -129,6 +142,52 @@ namespace ble
                 bleWeightData::clearDelay();
             }
             shouldUpdateSensorData = false;
+        }
+
+        if (currentTime - latestWifiConnectionCheckTimestamp > check_wifi_connection_delay_ms)
+        {
+            latestWifiConnectionCheckTimestamp = currentTime - (currentTime % check_wifi_connection_delay_ms);
+            _checkWifiConnectionLoop();
+        }
+    }
+
+    uint8_t serviceData[sizeof(type::Type) + sizeof(bool) + 12] = {0};
+    void updateAdvertisementData()
+    {
+        auto isAdvertising = pAdvertising->isAdvertising();
+        if (isAdvertising)
+        {
+            pAdvertising->stop();
+        }
+
+        uint8_t serviceDataSize = 0;
+
+        serviceData[serviceDataSize++] = (uint8_t)type::getType();
+        auto isWifiConnected = WiFi.isConnected();
+        serviceData[serviceDataSize++] = (uint8_t)isWifiConnected;
+
+        if (isWifiConnected)
+        {
+            auto ip = WiFi.localIP();
+            auto ipString = ip.toString();
+            memcpy(&serviceData[2], ipString.c_str(), ipString.length());
+            serviceDataSize += ipString.length();
+        }
+
+#if DEBUG
+        Serial.printf("service data: ");
+        for (uint8_t serviceDataIndex = 0; serviceDataIndex < serviceDataSize; serviceDataIndex++)
+        {
+            Serial.printf("%u,", serviceData[serviceDataIndex]);
+        }
+        Serial.println();
+#endif
+
+        pAdvertising->setServiceData(pService->getUUID(), std::string((char *)&serviceData, serviceDataSize));
+
+        if (isAdvertising)
+        {
+            pAdvertising->start();
         }
     }
 } // namespace ble

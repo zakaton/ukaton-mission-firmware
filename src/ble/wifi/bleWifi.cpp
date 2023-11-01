@@ -71,8 +71,8 @@ namespace bleWifi
         pIPAddressCharacteristic = ble::createCharacteristic(GENERATE_UUID("7005"), NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::NOTIFY, "wifi IP address");
         auto ip = WiFi.localIP();
         auto ipString = ip.toString();
-
         pIPAddressCharacteristic->setValue((uint8_t *)ipString.c_str(), ipString.length());
+
         pMACAddressCharacteristic = ble::createCharacteristic(GENERATE_UUID("7006"), NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::NOTIFY, "wifi MAC address");
         auto macAddress = WiFi.macAddress();
         pMACAddressCharacteristic->setValue((uint8_t *)macAddress.c_str(), macAddress.length());
