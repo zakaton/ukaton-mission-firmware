@@ -47,15 +47,33 @@ namespace ble
         }
     };
 
-    constexpr uint16_t check_wifi_connection_delay_ms = 1000;
-    unsigned long latestWifiConnectionCheckTimestamp = 0;
+    constexpr uint16_t check_advertising_data_delay_ms = 1000;
+    unsigned long latestAdvertisingDataCheckTimestamp = 0;
     bool isWifiConnected = false;
-    void _checkWifiConnectionLoop()
+    uint8_t deviceType;
+    void _checkAdvertisingDataLoop()
     {
+        bool shouldUpdateAdvertisementData = false;
+
         auto _isWifiConnected = WiFi.isConnected();
         if (_isWifiConnected != isWifiConnected)
         {
             isWifiConnected = _isWifiConnected;
+            shouldUpdateAdvertisementData = true;
+        }
+
+        if (!shouldUpdateAdvertisementData)
+        {
+            auto _deviceType = (uint8_t)type::getType();
+            if (_deviceType != deviceType)
+            {
+                deviceType = _deviceType;
+                shouldUpdateAdvertisementData = true;
+            }
+        }
+
+        if (shouldUpdateAdvertisementData)
+        {
             updateAdvertisementData();
         }
     }
@@ -144,10 +162,10 @@ namespace ble
             shouldUpdateSensorData = false;
         }
 
-        if (currentTime - latestWifiConnectionCheckTimestamp > check_wifi_connection_delay_ms)
+        if (currentTime - latestAdvertisingDataCheckTimestamp > check_advertising_data_delay_ms)
         {
-            latestWifiConnectionCheckTimestamp = currentTime - (currentTime % check_wifi_connection_delay_ms);
-            _checkWifiConnectionLoop();
+            latestAdvertisingDataCheckTimestamp = currentTime - (currentTime % check_advertising_data_delay_ms);
+            _checkAdvertisingDataLoop();
         }
     }
 
@@ -162,7 +180,8 @@ namespace ble
 
         uint8_t serviceDataSize = 0;
 
-        serviceData[serviceDataSize++] = (uint8_t)type::getType();
+        deviceType = (uint8_t)type::getType();
+        serviceData[serviceDataSize++] = deviceType;
         auto isWifiConnected = WiFi.isConnected();
         serviceData[serviceDataSize++] = (uint8_t)isWifiConnected;
 

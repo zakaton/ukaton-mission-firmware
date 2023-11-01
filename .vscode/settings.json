@@ -17,6 +17,8 @@
         "string": "cpp",
         "vector": "cpp",
         "typeinfo": "cpp",
-        "todo": "cpp"
+        "todo": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp"
     }
 }
