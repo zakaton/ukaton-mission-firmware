@@ -103,7 +103,7 @@ namespace ble
 
         pAdvertising = pServer->getAdvertising();
         pAdvertising->addServiceUUID(pService->getUUID());
-        // pAdvertising->setAppearance(0x0541); // https://specificationrefs.bluetooth.com/assigned-values/Appearance%20Values.pdf
+        pAdvertising->setAppearance(0x0441); // https://www.bluetooth.com/specifications/assigned-numbers/
         updateAdvertisementData();
         pAdvertising->setScanResponse(false);
 
