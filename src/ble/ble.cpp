@@ -105,7 +105,7 @@ namespace ble
         pAdvertising->addServiceUUID(pService->getUUID());
         pAdvertising->setAppearance(0x0441); // https://www.bluetooth.com/specifications/assigned-numbers/
         updateAdvertisementData();
-        pAdvertising->setScanResponse(false);
+        pAdvertising->setScanResponse(true);
 
         start();
     }
@@ -188,9 +188,13 @@ namespace ble
         if (isWifiConnected)
         {
             auto ip = WiFi.localIP();
-            auto ipString = ip.toString();
-            memcpy(&serviceData[2], ipString.c_str(), ipString.length());
-            serviceDataSize += ipString.length();
+            uint8_t address[4];
+            for (uint8_t i = 0; i < sizeof(address); i++)
+            {
+                address[i] = ip[i];
+            }
+            memcpy(&serviceData[2], address, sizeof(address));
+            serviceDataSize += sizeof(address);
         }
 
 #if DEBUG

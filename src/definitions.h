@@ -20,7 +20,7 @@
 #define I2C_SPEED 1000000
 #define DEFAULT_I2C_SPEED 400000
 #define CPU_FREQUENCY_MHZ 80 // 80, 160, or 240
-#define ENABLE_MOVE_TO_WAKE true
+#define ENABLE_MOVE_TO_WAKE false
 
 #define IS_INSOLE false
 #define IS_RIGHT_INSOLE false
