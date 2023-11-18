@@ -43,9 +43,15 @@ namespace motionSensor
         if (imuAddress)
         {
             Wire.setClock(100000);
+#if DEBUG
             // bno.enableDebugging();
-            bno.begin(imuAddress, Wire, interrupt_pin);
+#endif
+            auto beginAttempt = bno.begin(imuAddress, Wire, interrupt_pin);
 
+            if (!beginAttempt)
+            {
+                Serial.println("unable to begin imu");
+            }
             // bno.calibrateAll();
 
             attachInterrupt(digitalPinToInterrupt(interrupt_pin), interruptCallback, FALLING);

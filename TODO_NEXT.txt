@@ -1,5 +1,5 @@
 better namespace names (not just name:: or type::)
-refactor name and sensorData stuff for BLEPEer
+refactor name and sensorData stuff for BLEPeer
 run all ble subNamespaces (ble::sensorData) and stuff
     use the onSubscribe and manually check ble::isServerConnected and use flags
 rewrite namespaces like name to _name_ or something...
@@ -8,3 +8,8 @@ orient quaternion based on device type
 ble prefixes in namespace setups, e.g. bleName::setup(3) => "300x"
 mdns for easier IP discovery
 advertise IP address over BLE
+toggle debug during runtime
+toggle bno.debug during runtime
+serial API?
+redo BLE UUID's so it starts at 0000 and uses 4 characters and not the whole thing
+what happens if you leave the house and you're connected to wifi? It'll keep trying to connect and reset...
