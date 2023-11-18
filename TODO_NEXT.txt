@@ -13,3 +13,4 @@ toggle bno.debug during runtime
 serial API?
 redo BLE UUID's so it starts at 0000 and uses 4 characters and not the whole thing
 what happens if you leave the house and you're connected to wifi? It'll keep trying to connect and reset...
+don't send pressure data if there's 0 pressure
