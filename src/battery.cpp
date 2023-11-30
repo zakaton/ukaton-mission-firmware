@@ -25,10 +25,12 @@ namespace battery
         auto _voltage = lipo.getVoltage();
         auto _soc = lipo.getSOC();
         uint8_t _level = ceil(_soc);
+        _level = min(_level, (uint8_t)100);
 
-        // Serial.printf("voltage: %fv\n", _voltage);
+        Serial.printf("voltage: %fv\n", _voltage);
         Serial.printf("soc: %f%%\n", _soc);
         Serial.printf("level: %d%%\n", _level);
+        // Serial.printf("changeRate: %f%%\n", lipo.getChangeRate());
 
         if (_level != level)
         {
@@ -48,12 +50,14 @@ namespace battery
         if (!isClone && deviceAddress)
         {
             lipo.enableDebugging();
+            lipo.setDevice(MAX1704X_MAX17048);
             Serial.println("gonna begin battery gauge");
             if (!lipo.begin())
             {
                 Serial.println("MAX17043 not detected. Please check wiring");
             }
-            lipo.quickStart();
+            lipo.wake();
+            lipo.reset();
             checkBatteryLevel();
             // lipo.setThreshold(20);
         }
@@ -76,5 +80,11 @@ namespace battery
             checkBatteryLevel();
             lastCheckBatteryLevelTime = currentTime - (currentTime % check_battery_level_delay_ms);
         }
+    }
+
+    void sleep()
+    {
+        auto sleepResponse = lipo.sleep();
+        Serial.printf("lipo sleep response: %u\n", sleepResponse);
     }
 } // namespace battery

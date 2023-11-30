@@ -3,6 +3,7 @@
 #include "definitions.h"
 
 #include "ble/ble.h"
+#include "battery.h"
 
 #include "WiFi.h"
 #include "wifi/webSocket.h"
@@ -124,6 +125,8 @@ namespace moveToWake
         WiFi.disconnect(true);
         WiFi.mode(WIFI_OFF);
         btStop();
+
+        battery::sleep();
 
         adc_power_off();
         esp_wifi_stop();

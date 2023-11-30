@@ -11,6 +11,7 @@ namespace battery
 
     void setup();
     void loop();
+    void sleep();
 }
 
 #endif // _BATTERY_

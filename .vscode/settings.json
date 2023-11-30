@@ -19,6 +19,7 @@
         "typeinfo": "cpp",
         "todo": "cpp",
         "istream": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "cmath": "cpp"
     }
 }

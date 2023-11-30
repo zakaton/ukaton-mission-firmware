@@ -235,7 +235,7 @@ namespace sensorData
         }
 
 #if DEBUG
-        if (motionDataSize > 0)
+        if (false && motionDataSize > 0)
         {
             Serial.print("motion data: ");
             for (uint8_t index = 0; index < motionDataSize; index++)
