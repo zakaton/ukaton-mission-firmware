@@ -1,5 +1,3 @@
-imu
-pressure sensor positions
 new battery gauge
 
 byteSize in front of each message type for UDP/WebSocket (conflict with BLE)
