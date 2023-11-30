@@ -16,7 +16,7 @@
 namespace moveToWake
 {
     bool enabled = ENABLE_MOVE_TO_WAKE;
-    unsigned long delayUntilSleep = 1000 * 60 * 2;
+    unsigned long delayUntilSleep = 1000 * 60 * 5;
 
     void print_wakeup_reason()
     {

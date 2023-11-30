@@ -56,8 +56,12 @@ namespace motionSensor
     extern uint8_t calibration[(uint8_t)CalibrationType::COUNT];
     extern unsigned long lastCalibrationUpdateTime;
 
+#if IS_2023_DESIGN
+    constexpr auto interrupt_pin = GPIO_NUM_13;
+#else
     constexpr auto interrupt_pin = IS_ESP32_S3 ? GPIO_NUM_8 : IS_ESP32_C3 ? GPIO_NUM_4
                                                                           : GPIO_NUM_27;
+#endif
 
     extern bool isAvailable;
     void setup();
