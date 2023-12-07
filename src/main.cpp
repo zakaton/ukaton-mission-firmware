@@ -26,7 +26,7 @@ void setup()
     Wire.end();
     delay(2000);
     Wire.begin(PIN_IMU_SDA, PIN_IMU_SCL);
-    Wire.setClock(I2C_SPEED);
+    Wire.setClock(FAST_I2C_SPEED);
 
     battery::setup();
     name::setup();

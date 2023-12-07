@@ -42,7 +42,7 @@ namespace motionSensor
 
         if (imuAddress)
         {
-            Wire.setClock(100000);
+            Wire.setClock(DEFAULT_I2C_SPEED);
 #if DEBUG
             // bno.enableDebugging();
 #endif
@@ -56,7 +56,7 @@ namespace motionSensor
 
             attachInterrupt(digitalPinToInterrupt(interrupt_pin), interruptCallback, FALLING);
             interrupts();
-            Wire.setClock(I2C_SPEED);
+            Wire.setClock(DEFAULT_I2C_SPEED);
 
             isAvailable = true;
         }
