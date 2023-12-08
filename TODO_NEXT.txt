@@ -14,3 +14,5 @@ serial API?
 redo BLE UUID's so it starts at 0000 and uses 4 characters and not the whole thing
 what happens if you leave the house and you're connected to wifi? It'll keep trying to connect and reset...
 don't send pressure data if there's 0 pressure
+better pressure naming (net pressure, center of pressure...)
+wifi discovery (if wifi network isn't found, don't connect)
