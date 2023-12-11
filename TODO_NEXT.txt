@@ -18,3 +18,4 @@ better pressure naming (net pressure, center of pressure...)
 wifi discovery (if wifi network isn't found, don't connect)
 make charge linear
 charge detection
+pedometer
