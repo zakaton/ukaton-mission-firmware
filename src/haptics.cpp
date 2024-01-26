@@ -20,7 +20,7 @@ namespace haptics
         {
             if (drv.begin())
             {
-                drv.begin();
+                //drv.begin();
                 drv.setMode(DRV2605_MODE_INTTRIG);
                 drv.selectLibrary(1);
 
