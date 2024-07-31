@@ -30,7 +30,7 @@ namespace battery
         Serial.printf("voltage: %fv\n", _voltage);
         Serial.printf("soc: %f%%\n", _soc);
         Serial.printf("level: %d%%\n", _level);
-        // Serial.printf("changeRate: %f%%\n", lipo.getChangeRate());
+        Serial.printf("changeRate: %f%%\n", lipo.getChangeRate());
 
         if (_level != level)
         {

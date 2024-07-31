@@ -3,3 +3,5 @@ new battery gauge
 byteSize in front of each message type for UDP/WebSocket (conflict with BLE)
 chunking notifications into 20-byte packets for crappy androids
 shorten characteristic UUIDs
+
+notify motion calibration only when updated
